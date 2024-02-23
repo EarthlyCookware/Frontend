@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin | AncientEarth</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="../script.js" defer></script>
+    <script src="script.js" defer></script>
+
+    <link rel="icon" href="../../icons/icon.png">
+</head>
+<body>
+    <div id="navbar-container">
+        <!--<div id="announcements">Newly Available Products</div>-->
+        <div id="navbar">
+            <img src="../../icons/icon.png" alt="">
+            <div>
+                <a href="../../">Home</a>
+            </div>
+        </div>
+    </div>
+    <div id="parent-container">
+        <div id="sidebar">
+            <a href="../products" class="active-sidebar">Products</a>
+            <a href="../orders">Orders</a>
+            <a href="../customers">Customers</a>
+        </div>
+        <div id="main-container">
+            <div id="product-search-input-container">
+                <img src="../icons/search.png" alt="Search Products">
+                <input id="product-search" placeholder="Search All Products"/>
+            </div>
+            <div id="products-list">
+                <button id="add-product" onclick="toggleRightModal(true)">+ New Product</button>
+            </div>
+            <div id="right-modal-container" class="inactive-modal">
+                <button id="right-modal-toggler"></button>
+                <div id="right-modal">
+                    <h1 id="right-modal-header">Edit Product Details</h1>
+                    <h6>Product Name</h6>
+                    <div class="modal-input">
+                        <img src="../icons/store.png" alt="Product Name">
+                        <input type="text" placeholder="Product Name">
+                    </div>
+                    <h5>Give your product a short and clear name.</h5>
+                    <h6>Product Description</h6>
+                    <div class="modal-input">
+                        <img src="../icons/package.png" alt="Product Description">
+                        <input type="text" placeholder="Product Description">
+                    </div>
+                    <h5>Give your product a short and clear description.</h5>
+                    <h6>Product Price</h6>
+                    <div class="modal-input">
+                        <img src="../icons/dollar.png" alt="Product Price">
+                        <input type="number" placeholder="Product Price">
+                    </div>
+                    <div class="modal-toggle">
+                        <p>Allow customers to pay what they want?</p>
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-checkbox" name="toggleCheckbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <h6>Media</h6>
+                    <div class="modal-upload">
+                        <img src="../icons/image.png" alt="Product Image">
+                        <h1>Drop your images here, or <span class="accent">click to browse</span></h1>
+                        <p>256 x 144 (16:9) recommended</p>
+                    </div>
+                    <h5>Upload images of the product (the first upload will be used as the banner image).</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

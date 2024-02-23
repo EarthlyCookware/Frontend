@@ -14,7 +14,7 @@ console.log(btoa("youjee123"))
 document.getElementById("sign-in-button").onclick = function(){
     if(atob("cmsucm9uYWtqa290aGFyaUBnbWFpbC5jb20=") === document.getElementById("email-input").value){
         if(document.getElementById("password-input").value == atob("eW91amVlMTIz")){
-            console.log("logged in");
+            location.href = "../admin/products";
             return;
         }
     } console.log("incorrect");
