@@ -5,7 +5,9 @@
     <title>Admin | AncientEarth</title>
 
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
     <script src="../script.js" defer></script>
+    <script src="script.js" defer></script>
 
     <link rel="icon" href="../../icons/icon.png">
 </head>
@@ -21,12 +23,37 @@
     </div>
     <div id="parent-container">
         <div id="sidebar">
+            <a href="../dashboard">Dashboard</a>
             <a href="../products">Products</a>
             <a href="../orders" class="active-sidebar">Orders</a>
             <a href="../customers">Customers</a>
+            <a href="../posts">Blog Posts</a>
         </div>
         <div id="main-container">
-
+            <div id="orders-table-header">
+                <div>
+                    <h1>Orders</h1>
+                </div>
+                <div>
+                    <div class="orders-table-header-option">
+                        <img src="../icons/search.png" alt="">
+                    </div>
+                    <div class="orders-table-header-option">
+                        <img src="../icons/filter.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div id="orders-table">
+                <div class="orders-table-row">
+                    <p>No.</p>
+                    <p>Customer</p>
+                    <p>Items</p>
+                    <p>Status</p>
+                    <p>Total ($ USD)</p>
+                    <p>Checkpoints</p>
+                    <p></p>
+                </div>
+            </div>
         </div>
     </div>
 </body>

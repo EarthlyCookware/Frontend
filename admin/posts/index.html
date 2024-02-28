@@ -5,7 +5,9 @@
     <title>Admin | AncientEarth</title>
 
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
     <script src="../script.js" defer></script>
+    <script src="script.js" defer></script>
 
     <link rel="icon" href="../../icons/icon.png">
 </head>
@@ -24,11 +26,20 @@
             <a href="../dashboard">Dashboard</a>
             <a href="../products">Products</a>
             <a href="../orders">Orders</a>
-            <a href="../customers" class="active-sidebar">Customers</a>
-            <a href="../posts">Blog Posts</a>
+            <a href="../customers">Customers</a>
+            <a href="../posts" class="active-sidebar">Blog Posts</a>
         </div>
         <div id="main-container">
-
+            <div id="blog-posts-container">
+                <h1>All Blog Posts</h1>
+                <div id="posts-container"></div>
+            </div>
+            <div id="create-edit-post">
+                <h1 id="post-title" contenteditable="true">Blog Post Title</h1>
+                <textarea name="" id="post-content" cols="30" rows="10"></textarea>
+                <input type="text" id="post-image-url" placeholder="Banner Image URL">
+                <button id="create-post">+ Post Blog</button>
+            </div>
         </div>
     </div>
 </body>

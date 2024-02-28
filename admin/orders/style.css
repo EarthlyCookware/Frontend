@@ -1,0 +1,240 @@
+#main-container{
+    padding:0 !important;
+    width:calc(100vw - 321px);
+    overflow-x:hidden;
+    height:100%;
+    overflow-y:scroll;
+    display:flex;
+    flex-direction:column;
+    flex-shrink:0;
+}
+
+#orders-table-header{
+    width:calc(100% - 48px);
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    height:48px;
+    flex-shrink:0;
+    border-bottom:1px solid var(--border-color);
+}
+
+#orders-table-header > div{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:6px;
+}
+
+#orders-table-header > div:first-of-type > h1{
+    font-size:16px;
+    margin:0;
+}
+
+.orders-table-header-option > img{
+    height:18px;
+}
+
+.orders-table-more > img{
+    height:24px;
+}
+
+.orders-table-header-option > img, .orders-table-more > img{
+    cursor:pointer;
+    transition-duration:250ms;
+    filter:invert(0.25);
+}
+
+.orders-table-header-option > img:hover, .orders-table-more > img:hover{
+    filter:invert(0);
+}
+
+#orders-table{
+    width:100%;
+    text-align:left;
+}
+
+.orders-table-row{
+    display:grid;
+    grid-template-columns: 64px repeat(5, calc((100% - 128px) / 5)) 64px;
+    border-bottom:1px solid var(--border-color);
+    width:calc(100% - 24px);
+    padding:0 12px;
+}
+
+.orders-table-row > *{
+    padding:12px;
+}
+
+.orders-table-row > p{
+    margin:0;
+}
+
+.orders-table-row:first-of-type{
+    background:var(--bg-color-2);
+}
+
+.orders-table-row:first-of-type > *:not(:last-of-type){
+    border-right:1px solid var(--border-color);
+}
+
+.orders-table-row:first-of-type > p{
+    font-weight:600;
+    font-size:14px;
+    color:gray;
+}
+
+.orders-table-row:not(:first-of-type) > p{
+    font-size:14px;
+}
+
+.order-status{
+    padding:6px 8px;
+    font-weight:800;
+    border-radius:6px;
+    font-size:12px;
+    margin:0;
+}
+
+.received{
+    background:#ebf6f2;
+    color: #3cca8d;
+}
+
+.cancelled{
+    background:#fce6e8;
+    color:#f26469;
+}
+
+.pending{
+    background:#fff2de;
+    color:var(--accent-color);
+}
+
+.refunded{
+    background:#ebf4fd;
+    color:#527fe9;
+}
+
+.orders-table-row-product > h1{
+    margin:0;
+    font-size:14px;
+    font-weight:700;
+}
+
+.orders-table-row-product > p{
+    font-size:12px;
+    color:gray;
+    font-weight:700;
+    text-transform:uppercase;
+    margin: 0 0 6px;
+}
+
+.orders-table-number{
+    width:16px;
+    height:16px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    position:relative;
+    color:gray;
+    font-size:12px;
+}
+
+.orders-table-number::before{
+    position:absolute;
+    background:#32414d;
+    border-radius:50%;
+    opacity:0.125;
+    width:24px;
+    height:24px;
+    content:'';
+}
+
+.orders-table-more{
+    position:relative;
+}
+
+.orders-context-menu{
+    position:absolute;
+    right:24px;
+    top:48px;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    width:192px;
+    background:var(--bg-color-1);
+    box-shadow:0 0 6px 0 gray;
+    padding:12px 0;
+    border-radius:12px;
+}
+
+.orders-context-menu > div{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 12px;
+    transition-duration:250ms;
+}
+
+.orders-context-menu > div:hover{
+    background:var(--border-color);
+}
+
+.orders-context-menu > div:last-of-type:hover{
+    background:#f26469 !important;
+}
+
+.orders-context-menu > div:last-of-type:hover > img{
+    filter:invert(1);
+}
+
+.orders-context-menu > div:last-of-type:hover > p{
+    color:white;
+}
+
+/*.orders-context-menu > div:last-of-type:hover > p{
+    color:#f26469 !important;
+}*/
+
+.orders-context-menu > div > img{
+    transition-duration:250ms;
+    height:18px;
+}
+
+.orders-context-menu > div > p{
+    font-size:12px;
+    font-weight:600;
+    cursor:default;
+    transition-duration:250ms;
+    color:#303030;
+    margin:0;
+}
+
+.order-checkpoints{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.order-checkpoints > div{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    justify-content:space-between;
+    width:100%;
+}
+
+.order-checkpoints > div > img{
+    height:18px;
+}
+
+.order-checkpoints > div > p{
+    margin:0;
+    font-size:14px;
+    width:calc(100% - 30px);
+}
