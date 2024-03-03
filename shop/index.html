@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop | AncientEarth</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../navbar.css">
+    <link rel="icon" href="../icons/icon.png">
+
+    <script src="script.js"></script>
+</head>
+<body>
+    <div id="navbar-container">
+        <div id="announcements">Newly Available Products</div>
+        <div id="navbar">
+            <img src="../icons/icon.png" alt="Icon">
+            <div>
+                <a href="../">Home</a>
+                <a href="../shop">Shop</a>
+                <a href="../blog">Blog</a>
+                <a href="../about">About</a>
+                <a href="../contact">Contact</a>
+            </div>
+        </div>
+    </div>
+    <div id="main-container">
+        <div id="shop-navbar">
+            <h1>Explore AncientEarth</h1>
+            <div>
+                <p>Sort By: </p>
+                <div class="dropdown">
+                    <div class="dropdown-selected">Select an option</div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" data-value="Highest Relevancy" data-sorting="0">Most Relevant</div>
+                        <div class="dropdown-option" data-value="Highest Rating" data-sorting="1">Highest Rated</div>
+                        <div class="dropdown-option" data-value="Highest Popularity" data-sorting="2">Most Popular</div>
+                        <div class="dropdown-option" data-value="Lowest Price" data-sorting="2">Price (Low To High)</div>
+                        <div class="dropdown-option" data-value="Highest Price" data-sorting="2">Price (High To Low)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="shop-main">
+            <div id="shop-filters">
+                <div class="tree">
+                    <div class="tree-header" onclick="toggleTree()">
+                        <h1>Categories</h1>
+                        <img src="../icons/arrow_right.png" id="toggleIcon" class="toggle-icon" alt="Toggle">
+                    </div>
+                    <ul class="tree-list" id="treeList">
+                        <li onclick="selectItem(event, 'cookware')">Cookware</li>
+                        <li onclick="selectItem(event, 'tableware')">Tableware</li>
+                        <li onclick="selectItem(event, 'utensils')">Utensils</li>
+                        <li onclick="selectItem(event, 'accessories')">Accessories</li>
+                        <li onclick="selectItem(event, 'guides')">Guides</li>
+                    </ul>
+                </div>
+                <h1>Price</h1>
+                <div class="price-inputs">
+                    <input type="number" id="minPrice" placeholder="Min ($)" class="price-input" onchange="calculateFilter()">
+                    <input type="number" id="maxPrice" placeholder="Max ($)" class="price-input" onchange="calculateFilter()">
+                </div>
+            </div>
+            <div id="shop-list"></div>
+        </div>
+    </div>
+    <div id="footer-image">
+        <img src="../icons/icon.png" alt="">
+    </div>
+</body>
+</html>
