@@ -1,29 +1,64 @@
 const allowMultipleSelection = false;
 const filter = {};
 
-let selectedSorting = 0;
+const originalElements = [];
 
-function calculateFilter(){
+let selectedSorting = -1;
+
+function calculateFilter() {
     const minPrice = parseInt(document.getElementById('minPrice').value) || 0; // Default to 0 if no value
     const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity; // Default to Infinity if no value
 
-    const shopElements = document.querySelectorAll('.shop-element');
+    let shopElements = Array.from(document.querySelectorAll('.shop-element'));
+
+    const listItems = Array.from(document.querySelectorAll('#treeList li.bold'));
+    const selectedCategories = listItems.map(item => item.textContent.trim().toLowerCase());
 
     shopElements.forEach(element => {
         const priceText = element.querySelector('div:last-of-type > p').textContent;
         const price = parseFloat(priceText.replace(/^\$/, '')); // Remove the dollar sign and convert to number
+        const categoryName = element.querySelector('div:first-of-type p').textContent.trim().toLowerCase();
 
-        // Check if the price is outside the range
         if (price < minPrice || price > maxPrice) {
-            // If it is, hide the element
+            element.style.display = 'none';
+        } else if(!selectedCategories.includes(categoryName) && selectedCategories.length !== 0){
             element.style.display = 'none';
         } else {
-            // Otherwise, make sure the element is visible (in case it was previously hidden)
             element.style.display = '';
         }
     });
 
-    console.log("calc")
+    shopElements = shopElements.filter(element => element.style.display !== 'none');
+
+    if (typeof selectedSorting !== 'undefined') {
+        if (selectedSorting === -1){
+            // Reset everything??
+        } else if (selectedSorting === 0) {
+            shopElements.sort((a, b) => {
+                const ratingA = parseFloat(a.children[2].children[1].children[1].textContent);
+                const ratingB = parseFloat(b.children[2].children[1].children[1].textContent);
+
+                return ratingB - ratingA;
+            });
+        } else if (selectedSorting === 1) {
+            shopElements.sort((a, b) => {
+                const priceA = parseFloat(a.querySelector('div:last-of-type > p').textContent.replace(/^\$/, ''));
+                const priceB = parseFloat(b.querySelector('div:last-of-type > p').textContent.replace(/^\$/, ''));
+                return priceA - priceB;
+            });
+        } else if (selectedSorting === 2) {
+            shopElements.sort((a, b) => {
+                const priceA = parseFloat(a.querySelector('div:last-of-type > p').textContent.replace(/^\$/, ''));
+                const priceB = parseFloat(b.querySelector('div:last-of-type > p').textContent.replace(/^\$/, ''));
+                return priceB - priceA;
+            });
+        }
+
+        const shopList = document.getElementById('shop-list');
+        shopElements.forEach(element => {
+            shopList.appendChild(element); // This automatically moves them instead of copying
+        });
+    }
 }
 
 function toggleTree(force) {
@@ -56,9 +91,13 @@ function selectItem(event, id) {
         });
     }
     element.classList.toggle('bold');
+
+    calculateFilter();
 }
 
 function createShopElement(args) {
+    originalElements.push(args)
+
     const { image, category, name, description, approved, price, rating } = args;
 
     const shopElement = document.createElement('div');
@@ -140,6 +179,8 @@ document.addEventListener('DOMContentLoaded', function() {
             selected.textContent = this.getAttribute('data-value');
             selectedSorting = parseInt(this.getAttribute('data-sorting'));
             options.style.display = 'none';
+            
+            calculateFilter();
         });
     });
 
@@ -155,22 +196,32 @@ document.addEventListener('DOMContentLoaded', function() {
 function initialize() {
     toggleTree(true);
     createShopElement({
-        image: "https://images.unsplash.com/photo-1604264726154-26480e76f4e",
+        image: "https://www.rewilddc.com/cdn/shop/files/bf8e2ab3ad030d521966f6bdcbb39756.jpg",
         category: "Cookware",
         name: "Clay Pot",
         description: "Eco-Friendly Pot With All Natural Ingredients",
         approved: true,
-        price: 255.55,
-        rating: 4.9
+        price: 24.13,
+        rating: 4.6
     });
 
     createShopElement({
-        image: "https://plus.unsplash.com/premium_photo-1661454543510-79bf55705670",
+        image: "https://verostiendita.com/cdn/shop/products/image_fc4c7d52-6e1e-445e-b03f-778bfb1f5429.jpg",
         category: "Utensils",
         name: "Clay Spoons",
         description: "Pack of 6 Eco-Friendly Spoons With All Natural Ingredients",
         approved: false,
-        price: 128.99,
-        rating: 4.7
+        price: 9.99,
+        rating: 4.9
+    });
+
+    createShopElement({
+        image: "https://tableforchange.com/wp-content/uploads/2019/10/sambhramaa-food.png",
+        category: "Guides",
+        name: "Insider's Guide to Vedic Cooking",
+        description: "28 Recipes of Vedic Cooking",
+        approved: true,
+        price: 19.99,
+        rating: 4.8
     });
 }
