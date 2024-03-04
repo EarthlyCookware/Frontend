@@ -26,7 +26,10 @@
     </div>
     <div id="main-container">
         <div id="shop-navbar">
-            <h1>Explore AncientEarth</h1>
+            <div>
+                <h1>Explore AncientEarth</h1>
+                <p>Click An Item To Add It To Your Cart</p>
+            </div>
             <div>
                 <p>Sort By: </p>
                 <div class="dropdown">
@@ -70,5 +73,35 @@
         <img src="../icons/icon.png" alt="">
     </div>
     <div class="break"></div>
+    <div id="cart-modal">
+        <div id="cart-modal-button" onclick="toggleElement(document.getElementById('cart-modal-main'), false)">
+            <img id="cart-modal-button-img" src="../icons/cart_empty.png" alt="">
+        </div>
+        <div id="cart-modal-main">
+            <div id="cart-modal-header">
+                <h1>Cart Preview</h1>
+                <img src="../admin/icons/cancelled.png" alt="Close Modal" onclick="toggleElement(document.getElementById('cart-modal-main'), true)">
+            </div>
+            <div id="cart-elements">
+                <div id="cart-no-elements">No Items in Cart. Add Some Now</div>
+            </div>
+            <div id="cart-totals">
+                <div class="cart-total-sub">
+                    <p>Subtotal</p>
+                    <h1 id="cart-subtotal"></h1>
+                </div>
+                <div class="cart-total-sub">
+                    <p>Tax</p>
+                    <h1 id="cart-tax"></h1>
+                </div>
+                <div class="cart-break"></div>
+                <div class="cart-total-main">
+                    <p>Total</p>
+                    <h1 id="cart-total"></h1>
+                </div>
+            </div>
+            <a href="../checkout/">Go to Checkout</a>
+        </div>
+    </div>
 </body>
 </html>

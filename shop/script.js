@@ -3,6 +3,14 @@ const filter = {};
 
 const originalElements = [];
 
+const CATEGORIES = Object.freeze({
+   COOKWARE: "Cookware",
+   TABLEWARE: "Tableware",
+   UTENSILS: "Utensils",
+   ACCESSORIES: "Accessories",
+   GUIDES: "Guides"
+});
+
 let selectedSorting = -1;
 
 function calculateFilter() {
@@ -159,9 +167,109 @@ function createShopElement(args) {
     shopElement.appendChild(detailsDiv);
     shopElement.appendChild(priceRatingDiv);
 
+    shopElement.addEventListener("click", function(e){
+        e.preventDefault();
+        addToCart(args)
+    })
 
-    const shopList = document.getElementById('shop-list');
-    shopList.appendChild(shopElement);
+    document.getElementById('shop-list').appendChild(shopElement);
+}
+
+function createCartElement(args) {
+    // Destructuring args to extract needed variables
+    const { image, category, name, price, quantity } = args;
+
+    // Creating the outermost div and adding the 'cart-element' class
+    const cartElement = document.createElement('div');
+    cartElement.className = 'cart-element';
+
+    // Background div
+    const backgroundDiv = document.createElement('div');
+    backgroundDiv.className = 'cart-background';
+    backgroundDiv.style.backgroundImage = `url(${image})`;
+
+    // Category and Item Name section
+    const categoryItemDiv = document.createElement('div');
+    const categoryH2 = document.createElement('h2');
+    categoryH2.textContent = category;
+    const nameH1 = document.createElement('h1');
+    nameH1.textContent = name;
+    categoryItemDiv.appendChild(categoryH2);
+    categoryItemDiv.appendChild(nameH1);
+
+    // Price, Quantity section
+    const priceQuantityDiv = document.createElement('div');
+    const priceP = document.createElement('p');
+    priceP.textContent = `$${price.toFixed(2)}`;
+    const quantityH6 = document.createElement('h6');
+    quantityH6.textContent = 'Quantity:';
+
+    // Counter Container
+    const counterContainer = document.createElement('div');
+    counterContainer.className = 'counter-container';
+    const decreaseButton = document.createElement('button');
+    decreaseButton.className = 'decrease';
+    decreaseButton.textContent = '-';
+
+    const countSpan = document.createElement('span');
+    countSpan.className = 'count';
+    countSpan.textContent = quantity.toString();
+    const increaseButton = document.createElement('button');
+    increaseButton.className = 'increase';
+    increaseButton.textContent = '+';
+
+    decreaseButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        countSpan.innerHTML = Number(countSpan.textContent) - 1;
+
+        removeFromCart(name);
+
+        const cart = JSON.parse(localStorage.getItem("cart"));
+        document.getElementById("cart-no-elements").style.display = "flex";
+
+        if(Object.keys(cart).length !== 0) document.getElementById("cart-no-elements").style.display = "none";
+
+        updateCartTotals();
+    });
+
+    increaseButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        countSpan.innerHTML = Number(countSpan.textContent) + 1;
+
+        addToCart(args);
+
+        const cart = JSON.parse(localStorage.getItem("cart"));
+        document.getElementById("cart-no-elements").style.display = "flex";
+
+        if(Object.keys(cart).length !== 0) document.getElementById("cart-no-elements").style.display = "none";
+
+        updateCartTotals();
+    })
+
+    counterContainer.appendChild(decreaseButton);
+    counterContainer.appendChild(countSpan);
+    counterContainer.appendChild(increaseButton);
+    counterContainer.setAttribute("data-item", name);
+
+    // Assembling the structure
+    priceQuantityDiv.appendChild(priceP);
+    priceQuantityDiv.appendChild(quantityH6);
+    priceQuantityDiv.appendChild(counterContainer);
+
+    // Main div that holds Category/Item and Price/Quantity sections
+    const mainDiv = document.createElement('div');
+    mainDiv.appendChild(categoryItemDiv);
+    mainDiv.appendChild(priceQuantityDiv);
+
+    // Final assembly
+    cartElement.appendChild(backgroundDiv);
+    cartElement.appendChild(mainDiv);
+
+    // Appending the created cart element to a parent container, assumed to have the ID 'cart-list'
+    const cartList = document.getElementById('cart-elements');
+    cartList.appendChild(cartElement);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -193,11 +301,106 @@ document.addEventListener('DOMContentLoaded', function() {
     initialize();
 });
 
+function addToCart(args) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+    if (cart[args.name]) {
+        cart[args.name].quantity += 1;
+    } else {
+        cart[args.name] = { ...args, quantity: 1 };
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    initCart();
+}
+
+function removeFromCart(itemName) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+    if (cart[itemName]) {
+        if (cart[itemName].quantity > 1) {
+            cart[itemName].quantity -= 1;
+        } else {
+            delete cart[itemName];
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        initCart();
+    } else {
+        console.log("Item not found in the cart.");
+    }
+}
+
+function toggleElement(element, forceToggle) {
+    if (typeof forceToggle === 'boolean') {
+        if (forceToggle) {
+            element.classList.add('inactive-modal');
+        } else {
+            element.classList.remove('inactive-modal');
+        }
+    } else {
+        element.classList.toggle('inactive-modal');
+    }
+}
+
+function updateCartTotals(){
+    const cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+    if(Object.keys(cart).length > 0){
+        document.getElementById("cart-modal-button-img").src = "../icons/cart_full.png";
+    } else {
+        document.getElementById("cart-modal-button-img").src = "../icons/cart_empty.png";
+    }
+
+    let subtotal = 0;
+
+    // Iterate over each item in the cart
+    for (const itemName in cart) {
+        if (cart.hasOwnProperty(itemName)) {
+            const item = cart[itemName];
+            subtotal += item.price * item.quantity;
+        }
+    }
+
+    const tax = subtotal * 0.11
+
+    document.getElementById('cart-subtotal').textContent = subtotal.toFixed(2);
+    document.getElementById('cart-tax').textContent = tax.toFixed(2);
+
+    document.getElementById("cart-total").textContent = (subtotal + tax).toFixed(2);
+
+}
+
+function initCart(){
+    const cart = JSON.parse(localStorage.getItem("cart"));
+
+    const cartElements = document.querySelector('#cart-elements');
+
+    Array.from(cartElements.children).forEach(child => {
+        if (child.id !== 'cart-no-elements') {
+            cartElements.removeChild(child);
+        }
+    });
+
+    document.getElementById("cart-no-elements").style.display = "flex";
+
+    if(Object.keys(cart).length !== 0) document.getElementById("cart-no-elements").style.display = "none";
+
+    if (typeof cart === 'object') {
+        Object.values(cart).forEach(item => createCartElement(item));
+    } updateCartTotals();
+}
+
 function initialize() {
     toggleTree(true);
+
+    initCart();
+
     createShopElement({
         image: "https://www.rewilddc.com/cdn/shop/files/bf8e2ab3ad030d521966f6bdcbb39756.jpg",
-        category: "Cookware",
+        category: CATEGORIES.COOKWARE,
         name: "Clay Pot",
         description: "Eco-Friendly Pot With All Natural Ingredients",
         approved: true,
@@ -207,7 +410,7 @@ function initialize() {
 
     createShopElement({
         image: "https://verostiendita.com/cdn/shop/products/image_fc4c7d52-6e1e-445e-b03f-778bfb1f5429.jpg",
-        category: "Utensils",
+        category: CATEGORIES.UTENSILS,
         name: "Clay Spoons",
         description: "Pack of 6 Eco-Friendly Spoons With All Natural Ingredients",
         approved: false,
@@ -217,11 +420,21 @@ function initialize() {
 
     createShopElement({
         image: "https://tableforchange.com/wp-content/uploads/2019/10/sambhramaa-food.png",
-        category: "Guides",
+        category: CATEGORIES.GUIDES,
         name: "Insider's Guide to Vedic Cooking",
         description: "28 Recipes of Vedic Cooking",
         approved: true,
         price: 19.99,
         rating: 4.8
+    });
+
+    createShopElement({
+        image: "https://www.webstaurantstore.com/images/products/large/585486/2623159.jpg",
+        category: CATEGORIES.ACCESSORIES,
+        name: "2 Cotton Aprons",
+        description: "Red Poly-Cotton Adjustable Bib Apron with 2 Pockets and Natural Webbing Accents",
+        approved: true,
+        price: 7.99,
+        rating: 4.7
     });
 }
