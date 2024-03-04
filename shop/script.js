@@ -374,7 +374,12 @@ function updateCartTotals(){
 }
 
 function initCart(){
-    const cart = JSON.parse(localStorage.getItem("cart"));
+    let cart = JSON.parse(localStorage.getItem("cart"));
+
+    if(cart === undefined || cart === null){
+        cart = {};
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
     const cartElements = document.querySelector('#cart-elements');
 

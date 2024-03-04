@@ -74,10 +74,10 @@
     </div>
     <div class="break"></div>
     <div id="cart-modal">
-        <div id="cart-modal-button" onclick="toggleElement(document.getElementById('cart-modal-main'), false)">
+        <div id="cart-modal-button" onclick="toggleElement(document.getElementById('cart-modal-main'))">
             <img id="cart-modal-button-img" src="../icons/cart_empty.png" alt="">
         </div>
-        <div id="cart-modal-main">
+        <div id="cart-modal-main" class="inactive-modal">
             <div id="cart-modal-header">
                 <h1>Cart Preview</h1>
                 <img src="../admin/icons/cancelled.png" alt="Close Modal" onclick="toggleElement(document.getElementById('cart-modal-main'), true)">
