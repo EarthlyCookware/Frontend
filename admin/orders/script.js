@@ -56,7 +56,7 @@ function createOrder(id, args){
 
     const orderCheckpoints = document.createElement("div");
 
-    console.log(Object.keys(args.checkpoints));
+    //console.log(Object.keys(args.checkpoints));
 
     for(let i = 0; i < Object.keys(args.checkpoints).length; i++){
         const newCheckpointDiv = document.createElement("div");

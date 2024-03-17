@@ -23,11 +23,11 @@
     </div>
     <div id="parent-container">
         <div id="sidebar">
-            <a href="../dashboard">Dashboard</a>
+            <!--<a href="../dashboard">Dashboard</a>-->
             <a href="../products" class="active-sidebar">Products</a>
             <a href="../orders">Orders</a>
             <a href="../customers">Customers</a>
-            <a href="../posts">Blog Posts</a>
+            <!--<a href="../posts">Blog Posts</a>-->
         </div>
         <div id="main-container">
             <div id="product-search-input-container">
@@ -35,22 +35,22 @@
                 <input id="product-search" placeholder="Search All Products"/>
             </div>
             <div id="products-list">
-                <button id="add-product" onclick="document.getElementById('right-modal-header').innerHTML = 'New Product Details'; toggleRightModal(true)">+ New Product</button>
+                <button id="add-product" onclick="createProductModal()">+ New Product</button>
             </div>
-            <div id="right-modal-container">
+            <div id="right-modal-container" class="inactive-modal">
                 <button id="right-modal-toggler"></button>
                 <div id="right-modal">
                     <h1 id="right-modal-header">Edit Product Details</h1>
                     <h6>Product Name</h6>
                     <div class="modal-input">
                         <img src="../icons/store.png" alt="Product Name">
-                        <input type="text" placeholder="Product Name">
+                        <input type="text" placeholder="Product Name" id="product-name">
                     </div>
                     <h5>Give your product a short and clear name.</h5>
                     <h6>Product Description</h6>
                     <div class="modal-input">
                         <img src="../icons/package.png" alt="Product Description">
-                        <input type="text" placeholder="Product Description">
+                        <input type="text" placeholder="Product Description" id="product-description">
                     </div>
                     <h5>Give your product a short and clear description.</h5>
                     <h6>Product Category</h6>
@@ -72,7 +72,7 @@
                     <h6>Product Price</h6>
                     <div class="modal-input">
                         <img src="../icons/dollar.png" alt="Product Price">
-                        <input type="number" placeholder="Product Price">
+                        <input type="number" placeholder="Product Price" id="product-price">
                     </div>
                     <div class="modal-toggle">
                         <p>Allow customers to pay what they want?</p>
@@ -97,7 +97,7 @@
                     </div>
                     <p id="upload-data"></p>
                     <h5>Upload the image of the product</h5>
-                    <button>+ Create Product</button>
+                    <button id="modal-submit">+ Create Product</button>
                 </div>
             </div>
         </div>

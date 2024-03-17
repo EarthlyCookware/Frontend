@@ -334,3 +334,33 @@
 .dropdown-option:hover {
     background-color: var(--bg-color-2);
 }
+
+#right-modal > button:last-of-type{
+    width:100%;
+    background:var(--accent-color);
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    letter-spacing:1px;
+    border-radius:6px;
+    border:none;
+    font-weight:700;
+    font-size:14px;
+    color:white;
+    height:44px;
+    cursor:pointer;
+    outline:none;
+    transition-duration:250ms;
+    flex-shrink:0;
+}
+
+#upload-data{
+    display:none;
+    margin:0;
+}
+
+#right-modal > button:last-of-type:hover{
+    box-shadow:0 0 12px 0 var(--border-color);
+}

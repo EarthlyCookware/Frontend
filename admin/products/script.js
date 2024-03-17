@@ -26,7 +26,7 @@ function renderProduct(id, args){
     const productPrice = document.createElement("p");
 
     productName.innerHTML = args.name;
-    productPrice.innerHTML = args.price;
+    productPrice.innerHTML = `$${args.price.toLocaleString()}`;
 
     infoDiv.append(productName, productPrice);
 
@@ -39,15 +39,56 @@ function renderProduct(id, args){
     const deleteImage = document.createElement("img");
 
     editImage.src = "../icons/edit.png";
-    editButton.addEventListener("click", function(e){
-        //Something Should Go Here
+    editButton.addEventListener("click", async function(e){
+        e.preventDefault();
+        editImage.style.filter = "invert(0)";
+        editImage.src = "../icons/loading.gif";
+
+        try{
+            const response = await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/getProductById/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type'
+                },
+                mode: 'cors'
+            });
+
+            let content = await response.json();
+            console.log(content);
+
+            document.getElementById("product-name").value = content.name;
+            document.getElementById("product-description").value = content.description;
+            document.querySelector(".dropdown-selected").children[0].src = `../icons/${content.category.toLowerCase()}.png`;
+            document.querySelector(".dropdown-selected").children[1].textContent = content.category;
+            document.getElementById("upload-data").textContent = content.image;
+            document.querySelectorAll(".toggle-checkbox")[1].checked = content.approved;
+
+            document.getElementById("product-price").value = content.price;
+
+            if(content.price === 0){
+                document.querySelectorAll(".toggle-checkbox")[1].checked = true;
+            }
+
+            document.getElementById('right-modal-header').innerHTML = 'Edit Product Details';
+            document.getElementById('modal-submit').setAttribute("onclick", `editProduct('${id}')`);
+            toggleRightModal(true);
+
+        } catch (e) {
+            console.error(e);
+        }
+
+        editImage.style.filter = "invert(0.25)";
+        editImage.src = "../icons/edit.png";
     });
 
     deleteImage.src = "../icons/delete.png";
     deleteButton.addEventListener("click", async function(e){
         e.preventDefault();
 
-        const response = await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/deleteProduct/${id}`, {
+        await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/deleteProduct/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,6 +146,91 @@ async function productsInit(){
     }
 }
 
+function createProductModal(){
+    document.getElementById('right-modal-header').innerHTML = 'New Product Details';
+    document.getElementById('modal-submit').setAttribute("onclick", "createProduct()");
+    toggleRightModal(true)
+}
+
+async function editProduct(id){
+    let price;
+
+    if (document.querySelectorAll(".toggle-checkbox")[0].checked) {
+        price = 0;
+    } else {
+        price = Number(document.getElementById("product-price").value);
+    }
+
+    const response = await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/editProduct`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS, PATCH',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        body: JSON.stringify({
+            id:id,
+            args: {
+                name: document.getElementById("product-name").value,
+                description: document.getElementById("product-description").value,
+                category: document.querySelector(".dropdown-selected").children[1].textContent,
+                image: document.getElementById("upload-data").textContent,
+                approved: document.querySelectorAll(".toggle-checkbox")[1].checked,
+                price: price,
+                likes:0
+            }
+        }),
+        mode: 'cors'
+    });
+
+    const context = await response.json();
+    console.log(context);
+
+    if(context.message.includes("successfully")){
+        toggleRightModal(false);
+        await productsInit();
+    };
+}
+
+async function createProduct(){
+    let price;
+
+    if (document.querySelectorAll(".toggle-checkbox")[0].checked) {
+        price = 0;
+    } else {
+        price = Number(document.getElementById("product-price").value);
+    }
+
+    const response = await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/createProduct`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        body: JSON.stringify({
+            name: document.getElementById("product-name").value,
+            description: document.getElementById("product-description").value,
+            category: document.querySelector(".dropdown-selected").children[1].textContent,
+            image: document.getElementById("upload-data").textContent,
+            approved: document.querySelectorAll(".toggle-checkbox")[1].checked,
+            price: price,
+            likes:0
+        }),
+        mode: 'cors'
+    });
+
+    const context = await response.json();
+    console.log(context);
+
+    if(context.message === "New Product Created"){
+        toggleRightModal(false);
+        await productsInit();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const dropdown = document.querySelector('.dropdown');
     const selected = document.querySelector('.dropdown-selected');
@@ -121,8 +247,6 @@ document.addEventListener('DOMContentLoaded', function() {
             selected.children[1].textContent = this.getAttribute('data-value');
             selectedSorting = parseInt(this.getAttribute('data-sorting'));
             options.style.display = 'none';
-
-            calculateFilter();
         });
     });
 

@@ -3,7 +3,7 @@ document.getElementById("sign-in-button").onclick = function(){
         if(document.getElementById("password-input").value === atob("eW91amVlMTIz")){
             localStorage.setItem("loggedIn", JSON.stringify(true));
 
-            location.href = "../admin/dashboard";
+            location.href = "../admin/products";
             return;
         }
     } console.log("incorrect");
