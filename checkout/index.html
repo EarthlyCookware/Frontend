@@ -2,9 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Checkout | AncientEarth</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../navbar.css">
+    <link rel="icon" href="../icons/icon.png">
+
+    <script src="script.js"></script>
 </head>
 <body>
-
+    <a id="back-button" title="Continue Shopping" href="../shop">
+        <img src="../admin/icons/store.png" alt="">
+    </a>
+    <div id="main-container">
+        <div id="progress-modal">
+            <h6>Progress</h6>
+            <div>
+                <div id="progress-bar"></div>
+                <h1>65%</h1>
+            </div>
+        </div>
+        <div id="modals-container">
+            <div class="modal active-modal">
+                <div class="modal-header">
+                    <h1>Customer Info</h1>
+                </div>
+                <div class="double-input">
+                    <div>
+                        <h6>First Name</h6>
+                        <input type="text" id="first-name" class="required-input">
+                    </div>
+                    <div>
+                        <h6>Last Name</h6>
+                        <input type="text" id="last-name" class="required-input">
+                    </div>
+                </div>
+                <div class="single-input">
+                    <h6>Email Address</h6>
+                    <input type="text" id="email-name" class="required-input">
+                </div>
+                <div class="single-input">
+                    <h6>Home Address</h6>
+                    <input type="text" id="home-address" class="required-input">
+                </div>
+                <div class="double-input">
+                    <div>
+                        <h6>City</h6>
+                        <input type="text" id="city" class="required-input">
+                    </div>
+                    <div>
+                        <h6>State/Province</h6>
+                        <input type="text" id="state" class="required-input">
+                    </div>
+                </div>
+                <div class="double-input">
+                    <div>
+                        <h6>Country</h6>
+                        <input type="text" id="country" class="required-input">
+                    </div>
+                    <div>
+                        <h6>Zip Code</h6>
+                        <input type="text" id="zip-code" class="required-input">
+                    </div>
+                </div>
+                <div class="custom-checkbox-container">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="customCheckbox">
+                        <span class="checkmark">
+                            <img src="../icons/checkmark.png" alt="Check">
+                        </span>
+                    </label>
+                    <p>Use as Billing Address</p>
+                </div>
+                <button class="proceed-button">Save and Continue</button>
+            </div>
+            <div class="modal">
+                <div class="modal-header">
+                    <h1>Customer Info</h1>
+                    <img src="../icons/back.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

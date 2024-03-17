@@ -1,0 +1,240 @@
+body{
+    width:100vw;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    overflow-y:scroll;
+}
+
+#back-button{
+    background:var(--accent-color);
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    transition-duration:250ms;
+    cursor:pointer;
+    position:fixed;
+    right:24px;
+    bottom:24px;
+}
+
+#back-button:hover{
+    box-shadow:0 0 12px 0 var(--border-color);
+}
+
+#back-button > img{
+    height:24px;
+    filter:invert(1);
+}
+
+#main-container{
+    box-shadow:0 0 12px 0 var(--border-color);
+    width:512px;
+    border-radius:12px;
+    overflow:hidden;
+    margin:48px 0;
+}
+
+#progress-modal{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:flex-start;
+    width:calc(100% - 48px);
+    border-bottom:1px solid var(--border-color);
+    padding:24px;
+    gap:6px;
+}
+
+#progress-modal > h6{
+    color:gray;
+    text-transform: uppercase;
+    font-size:12px;
+    font-weight:700;
+    margin:0;
+}
+
+#progress-modal > div{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+}
+
+#progress-bar{
+    width:408px;
+    height:12px;
+    background:linear-gradient(135deg, var(--accent-color) 0%, var(--accent-gradient) 65%, var(--bg-color-2) 65%, var(--bg-color-2) 100%);
+    border-radius:6px;
+}
+
+#progress-modal > div > h1{
+    font-size:16px;
+    margin:0;
+}
+
+.modal{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:flex-start;
+    width:calc(100% - 48px);
+    padding:24px;
+    gap:24px;
+}
+
+.modal:not(.active-modal){
+    display:none;
+}
+
+.proceed-button{
+    width:100%;
+    background:var(--accent-color);
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    letter-spacing:1px;
+    border-radius:6px;
+    border:none;
+    font-weight:700;
+    font-size:14px;
+    color:white;
+    height:44px;
+    cursor:pointer;
+    outline:none;
+    transition-duration:250ms;
+}
+
+.proceed-button:hover{
+    box-shadow:0 0 12px 0 var(--border-color);
+}
+
+.modal-header{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+}
+
+.modal-header > h1{
+    margin:0;
+    font-size:18px;
+}
+
+.modal-header > img{
+    height:24px;
+    cursor:pointer;
+    transition-duration:250ms;
+}
+
+.modal-header > img:hover{
+    transform:scale(1.05);
+}
+
+.double-input{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    justify-content:space-between;
+    width:100%;
+}
+
+.double-input > div{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:flex-start;
+    gap:12px;
+    width:calc(50% - 12px);
+}
+
+.single-input{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:flex-start;
+    width:100%;
+    gap:12px;
+}
+
+.double-input > div > h6, .single-input > h6{
+    font-size:12px;
+    color:gray;
+    margin:0;
+}
+
+.double-input > div > input, .single-input > input{
+    width:calc(100% - 12px);
+    padding:0 6px;
+    border-radius:6px;
+    height:24px;
+    font-size:12px;
+    border:1px solid var(--border-color);
+    color:gray;
+}
+
+.double-input > div > input:focus, .single-input > input:focus{
+    outline:2px solid var(--accent-color);
+}
+
+h6:has(+ .required-input)::after{
+    content:'*';
+    margin-left:2px;
+    color:red;
+    font-weight:900;
+    font-size:12px;
+}
+
+.custom-checkbox-container{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:12px;
+}
+
+.custom-checkbox-container > p{
+    margin:0;
+    font-size:12px;
+    color:gray;
+    font-weight:700;
+}
+
+.custom-checkbox {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.custom-checkbox input {
+    display: none;
+}
+
+.custom-checkbox .checkmark {
+    height:20px;
+    width:20px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border-color);
+    border-radius:4px;
+}
+
+.custom-checkbox .checkmark > img{
+    height:16px;
+    filter:invert(1);
+}
+
+.custom-checkbox input:checked + .checkmark {
+    background-color: var(--accent-color);
+}
