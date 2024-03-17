@@ -4,7 +4,7 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function createOrder(args){
+function createOrder(id, args){
     orderNumber++;
     const newDiv = document.createElement("div");
     newDiv.classList.add("orders-table-row");
@@ -17,13 +17,17 @@ function createOrder(args){
     customerName.innerHTML = args.customer;
 
     const orderProductContainer = document.createElement("div");
-    const orderProduct = document.createElement("h1");
-    const orderQuantity = document.createElement("p");
 
-    orderProduct.innerHTML = args.product;
-    orderQuantity.innerHTML = `QTY: ${args.quantity}`;
+    for(let i = 0; i < args.products.length; i++) {
+        const orderProduct = document.createElement("h1");
+        const orderQuantity = document.createElement("p");
 
-    orderProductContainer.append(orderProduct, orderQuantity);
+        orderProduct.innerHTML = args.products[i][0];
+        orderQuantity.innerHTML = `QTY: ${args.products[i][1]}`;
+
+        orderProductContainer.append(orderProduct, orderQuantity);
+    }
+
     orderProductContainer.classList.add("orders-table-row-product");
 
     const orderStatusContainer = document.createElement("p");
@@ -129,70 +133,36 @@ function createOrder(args){
     document.getElementById("orders-table").appendChild(newDiv);
 }
 
-function initialize(){
-    createOrder({
-        customer: "Ronak Kothari",
-        product: "Clay Pots",
-        quantity: 2,
-        price: "144.99",
-        checkpoints: {
-            placed: "11/26/2023",
-            shipped: "11/27/2023",
-            delivery: "11/29/2023",
-            received: "12/01/2023"
+async function initialize(){
+    document.querySelectorAll('#orders-table > *').forEach(element => {
+        if(element.id !== 'orders-table-legend') {
+            element.remove();
         }
     });
 
-    createOrder({
-        customer: "Jyot Kumar",
-        product: "Stainless Steel Pots",
-        quantity: 12,
-        price: "57.99",
-        checkpoints: {
-            placed: "12/07/2023",
-            shipped: "12/08/2023",
-            delivery: "12/10/2023",
-            refunded: "12/12/2023"
-        }
+    const response = await fetch("https://us-central1-ancientearth-cookware.cloudfunctions.net/app/getOrders", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        mode: 'cors'
     });
 
-    createOrder({
-        customer: "Rupali Khot",
-        product: "Miniature Clay Pots",
-        quantity: 24,
-        price: "28.99",
-        checkpoints: {
-            placed: "12/07/2023",
-            shipped: "12/08/2023",
-            delivery: "12/10/2023",
-            cancelled: "12/12/2023"
-        }
-    });
+    const context = await response.json();
+    console.log(context);
 
-    createOrder({
-        customer: "Ronak Kothari",
-        product: "Clay Pots",
-        quantity: 4,
-        price: "288.99",
-        checkpoints: {
-            placed: "12/07/2023",
-            shipped: "12/08/2023",
-            delivery: "12/10/2023",
-            received: "12/12/2023"
+    for(let i = 0; i < Object.values(context).length; i++){
+        try{
+            createOrder(Object.keys(context)[i], Object.values(context)[i]);
+        } catch (e) {
+            console.error(e);
         }
-    });
-
-    createOrder({
-        customer: "Shrihun Sankepally",
-        product: "Miniature Clay Pots",
-        quantity: 24,
-        price: "28.99",
-        checkpoints: {
-            placed: "12/07/2023",
-            shipped: "12/08/2023",
-            delivery: "12/10/2023"
-        }
-    });
+    }
 }
 
-initialize();
+window.onload = async function(){
+    await initialize();
+}

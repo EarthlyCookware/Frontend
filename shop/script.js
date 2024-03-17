@@ -103,10 +103,10 @@ function selectItem(event, id) {
     calculateFilter();
 }
 
-function createShopElement(args) {
+function createShopElement(id, args) {
     originalElements.push(args)
 
-    const { image, category, name, description, approved, price, rating } = args;
+    const { image, category, name, description, approved, price, likes } = args;
 
     const shopElement = document.createElement('div');
     shopElement.className = 'shop-element';
@@ -149,12 +149,64 @@ function createShopElement(args) {
     priceP.textContent = `$${price.toFixed(2)}`;
     const ratingDiv = document.createElement('div');
     const starImg = document.createElement('img');
-    starImg.src = '../icons/star.png';
-    starImg.alt = "Star";
+
+    let likesArray = JSON.parse(localStorage.getItem('likes'));
+
+    if(likesArray.includes(id)){
+        starImg.src = '../icons/heart_filled.png';
+    } else {
+        starImg.src = '../icons/heart.png';
+    }
+
+    starImg.alt = "Heart";
     const ratingP = document.createElement('p');
-    ratingP.textContent = rating.toString();
+    ratingP.textContent = likes.toString();
     ratingDiv.appendChild(starImg);
     ratingDiv.appendChild(ratingP);
+
+    ratingDiv.addEventListener('click', async function(e) {
+        console.log(starImg.src !== '../icons/heart_filled.png');
+
+        if(starImg.src.split('/').pop() !== 'heart_filled.png'){
+            starImg.src = '../icons/heart_filled.png';
+
+            if(!likesArray.includes(id)){
+                likesArray.push(id);
+                localStorage.setItem('likes', JSON.stringify(likesArray));
+
+                const response = await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/increaseLikes/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    }
+                });
+
+                const context = await response.json();
+                console.log(context);
+            }
+        } else {
+            starImg.src = '../icons/heart.png';
+
+            likesArray = likesArray.filter(item => item !== id);
+            localStorage.setItem('likes', JSON.stringify(likesArray));
+
+            const response = await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/decreaseLikes/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type'
+                }
+            });
+
+            const context = await response.json();
+            console.log(context);
+        }
+    });
 
     priceRatingDiv.appendChild(priceP);
     priceRatingDiv.appendChild(ratingDiv);
@@ -398,10 +450,19 @@ function initCart(){
     } updateCartTotals();
 }
 
+function isValueInLikes(value) {
+    const likes = JSON.parse(localStorage.getItem('likes')); // Retrieves 'likes' array from localStorage
+    return likes.includes(value); // Checks if the value is in the 'likes' array
+}
+
 async function initialize() {
     toggleTree(true);
 
     initCart();
+
+    if (!localStorage.getItem('likes')) {
+        localStorage.setItem('likes', JSON.stringify([])); // Initializes 'likes' with an empty array
+    }
 
     const response = await fetch("https://us-central1-ancientearth-cookware.cloudfunctions.net/app/getProducts", {
         method: 'GET',
@@ -417,7 +478,7 @@ async function initialize() {
     const context = await response.json();
     console.log(context);
 
-    Object.values(context).forEach(element => {
-        createShopElement(element);
-    });
+    for(let i = 0; i < Object.values(context).length; i++){
+        createShopElement(Object.keys(context)[i], Object.values(context)[i]);
+    }
 }

@@ -35,9 +35,9 @@
                 <input id="product-search" placeholder="Search All Products"/>
             </div>
             <div id="products-list">
-                <button id="add-product" onclick="toggleRightModal(true)">+ New Product</button>
+                <button id="add-product" onclick="document.getElementById('right-modal-header').innerHTML = 'New Product Details'; toggleRightModal(true)">+ New Product</button>
             </div>
-            <div id="right-modal-container" class="inactive-modal">
+            <div id="right-modal-container">
                 <button id="right-modal-toggler"></button>
                 <div id="right-modal">
                     <h1 id="right-modal-header">Edit Product Details</h1>
@@ -53,6 +53,22 @@
                         <input type="text" placeholder="Product Description">
                     </div>
                     <h5>Give your product a short and clear description.</h5>
+                    <h6>Product Category</h6>
+                    <div class="dropdown">
+                        <div class="dropdown-selected">
+                            <img src="../icons/none_selected.png" alt="Category">
+                            <p>Select a Category</p>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-option" data-value="Cookware">Cookware</div>
+                            <div class="dropdown-option" data-value="Tableware">Tableware</div>
+                            <div class="dropdown-option" data-value="Utensils">Utensils</div>
+                            <div class="dropdown-option" data-value="Accessories">Accessories</div>
+                            <div class="dropdown-option" data-value="Guides">Guides</div>
+                            <div class="dropdown-option" data-value="Other">Other</div>
+                        </div>
+                    </div>
+                    <h5>Give your product a searchable category</h5>
                     <h6>Product Price</h6>
                     <div class="modal-input">
                         <img src="../icons/dollar.png" alt="Product Price">
@@ -65,13 +81,23 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-                    <h6>Media</h6>
-                    <div class="modal-upload">
-                        <img src="../icons/image.png" alt="Product Image">
-                        <h1>Drop your images here, or <span class="accent">click to browse</span></h1>
-                        <p>256 x 144 (16:9) recommended</p>
+                    <div class="modal-toggle">
+                        <p>Is This Product Eco-Friendly Approved?</p>
+                        <label class="switch">
+                            <input type="checkbox" class="toggle-checkbox" name="toggleCheckbox">
+                            <span class="slider"></span>
+                        </label>
                     </div>
-                    <h5>Upload images of the product (the first upload will be used as the banner image).</h5>
+                    <h6>Media</h6>
+                    <div class="modal-upload" id="upload-image-div">
+                        <input type="file" id="file-input" accept="image/*" style="display: none;" />
+                        <img src="../icons/image.png" alt="Product Image">
+                        <h1>Drop your image here, or <span class="accent">click to browse</span></h1>
+                        <p>256 x 256 (1:1) recommended</p>
+                    </div>
+                    <p id="upload-data"></p>
+                    <h5>Upload the image of the product</h5>
+                    <button>+ Create Product</button>
                 </div>
             </div>
         </div>
