@@ -49,11 +49,22 @@ function renderProduct(args){
     document.getElementById("products-list").insertBefore(newDiv, document.getElementById("add-product"))
 }
 
-function productsInit(){
-    renderProduct({
-        name:"Product Name",
-        price:"$24.99-$49.99",
-        image:"https://images.unsplash.com/photo-1580137189272-c9379f8864fd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        id:0,
-    })
-} productsInit()
+async function productsInit(){
+    const response = await fetch("https://us-central1-ancientearth-cookware.cloudfunctions.net/app/getProducts", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        mode: 'cors'
+    });
+
+    const context = await response.json();
+    console.log(context);
+
+    Object.values(context).forEach(element => {
+        renderProduct(element);
+    });
+} productsInit();

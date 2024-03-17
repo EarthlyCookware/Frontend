@@ -49,6 +49,7 @@
     background-position:center;
     background-repeat:no-repeat;
     margin-bottom:12px;
+    box-shadow:0 0 12px 0 var(--border-color);
 }
 
 .product > div:nth-of-type(2){

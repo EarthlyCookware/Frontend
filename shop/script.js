@@ -398,48 +398,26 @@ function initCart(){
     } updateCartTotals();
 }
 
-function initialize() {
+async function initialize() {
     toggleTree(true);
 
     initCart();
 
-    createShopElement({
-        image: "https://www.rewilddc.com/cdn/shop/files/bf8e2ab3ad030d521966f6bdcbb39756.jpg",
-        category: CATEGORIES.COOKWARE,
-        name: "Clay Pot",
-        description: "Eco-Friendly Pot With All Natural Ingredients",
-        approved: true,
-        price: 24.13,
-        rating: 4.6
+    const response = await fetch("https://us-central1-ancientearth-cookware.cloudfunctions.net/app/getProducts", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        mode: 'cors'
     });
 
-    createShopElement({
-        image: "https://verostiendita.com/cdn/shop/products/image_fc4c7d52-6e1e-445e-b03f-778bfb1f5429.jpg",
-        category: CATEGORIES.UTENSILS,
-        name: "Clay Spoons",
-        description: "Pack of 6 Eco-Friendly Spoons With All Natural Ingredients",
-        approved: false,
-        price: 9.99,
-        rating: 4.9
-    });
+    const context = await response.json();
+    console.log(context);
 
-    createShopElement({
-        image: "https://tableforchange.com/wp-content/uploads/2019/10/sambhramaa-food.png",
-        category: CATEGORIES.GUIDES,
-        name: "Insider's Guide to Vedic Cooking",
-        description: "28 Recipes of Vedic Cooking",
-        approved: true,
-        price: 19.99,
-        rating: 4.8
-    });
-
-    createShopElement({
-        image: "https://www.webstaurantstore.com/images/products/large/585486/2623159.jpg",
-        category: CATEGORIES.ACCESSORIES,
-        name: "2 Cotton Aprons",
-        description: "Red Poly-Cotton Adjustable Bib Apron with 2 Pockets and Natural Webbing Accents",
-        approved: true,
-        price: 7.99,
-        rating: 4.7
+    Object.values(context).forEach(element => {
+        createShopElement(element);
     });
 }
