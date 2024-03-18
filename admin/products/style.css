@@ -364,3 +364,32 @@
 #right-modal > button:last-of-type:hover{
     box-shadow:0 0 12px 0 var(--border-color);
 }
+
+.error-modal {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background-color:#fce6e8;
+    box-shadow:0 0 12px 0 gray;
+    opacity: 0;
+    transition: opacity 0.5s;
+    border-radius:6px;
+    visibility: hidden;
+    overflow:hidden;
+    z-index:5;
+}
+
+#error-modal-header {
+    padding: 10px;
+    background-color: #f26469;
+    font-size:16px;
+    color: white;
+    font-weight: bold;
+}
+
+#error-modal-body {
+    padding: 10px;
+    font-size:14px;
+    color: #333;
+}

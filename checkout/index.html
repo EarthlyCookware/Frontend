@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../navbar.css">
     <link rel="icon" href="../icons/icon.png">
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <a id="back-button" title="Continue Shopping" href="../shop">
@@ -19,11 +19,11 @@
             <h6>Progress</h6>
             <div>
                 <div id="progress-bar"></div>
-                <h1>65%</h1>
+                <h1 id="progress-percentage">65%</h1>
             </div>
         </div>
         <div id="modals-container">
-            <div class="modal active-modal">
+            <div class="modal">
                 <div class="modal-header">
                     <h1>Customer Info</h1>
                 </div>
@@ -74,13 +74,34 @@
                     </label>
                     <p>Use as Billing Address</p>
                 </div>
-                <button class="proceed-button">Save and Continue</button>
+                <button class="proceed-button" onclick="toggleModal(1, 0)">Save and Continue</button>
             </div>
             <div class="modal">
                 <div class="modal-header">
-                    <h1>Customer Info</h1>
-                    <img src="../icons/back.png" alt="">
+                    <h1>Confirming Cart</h1>
+                    <img src="../icons/back.png" alt="" onclick="toggleModal(0, 1)">
                 </div>
+                <div id="cart-modal-main">
+                    <div id="cart-elements">
+                        <div id="cart-no-elements">No Items in Cart. Add Some Now</div>
+                    </div>
+                    <div id="cart-totals">
+                        <div class="cart-total-sub">
+                            <p>Subtotal</p>
+                            <h1 id="cart-subtotal"></h1>
+                        </div>
+                        <div class="cart-total-sub">
+                            <p>Tax</p>
+                            <h1 id="cart-tax"></h1>
+                        </div>
+                        <div class="cart-break"></div>
+                        <div class="cart-total-main">
+                            <p>Total</p>
+                            <h1 id="cart-total"></h1>
+                        </div>
+                    </div>
+                </div>
+                <button class="proceed-button" onclick="checkoutNow()">Checkout Now</button>
             </div>
         </div>
     </div>

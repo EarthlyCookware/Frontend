@@ -74,6 +74,9 @@ function renderProduct(id, args){
 
             document.getElementById('right-modal-header').innerHTML = 'Edit Product Details';
             document.getElementById('modal-submit').setAttribute("onclick", `editProduct('${id}')`);
+
+            document.getElementById("modal-submit").innerHTML = "+ Confirm Edit Changes"
+
             toggleRightModal(true);
 
         } catch (e) {
@@ -149,6 +152,17 @@ async function productsInit(){
 function createProductModal(){
     document.getElementById('right-modal-header').innerHTML = 'New Product Details';
     document.getElementById('modal-submit').setAttribute("onclick", "createProduct()");
+
+    document.getElementById("product-name").value = "";
+    document.getElementById("product-description").value = "";
+    document.querySelector(".dropdown-selected").children[0].src = `../icons/none_selected.png`;
+    document.querySelector(".dropdown-selected").children[1].textContent = "Select a Category";
+    document.getElementById("upload-data").textContent = "";
+    document.querySelectorAll(".toggle-checkbox")[1].checked = "";
+
+    document.getElementById("product-price").value = "";
+    document.getElementById("modal-submit").innerHTML = "+ Create Product"
+
     toggleRightModal(true)
 }
 
@@ -190,11 +204,31 @@ async function editProduct(id){
     if(context.message.includes("successfully")){
         toggleRightModal(false);
         await productsInit();
-    };
+    }
+}
+
+function displayError(header, message){
+    const errorModal = document.getElementById('errorModal');
+
+    document.getElementById('error-modal-header').innerHTML = header;
+    document.getElementById('error-modal-body').innerHTML = message;
+
+    errorModal.style.visibility = "visible";
+    errorModal.style.opacity = 1;
+
+    setTimeout(() => {
+        errorModal.style.opacity = 0;
+        errorModal.style.visibility = "hidden";
+    }, 5000);
 }
 
 async function createProduct(){
     let price;
+
+    if(document.querySelector(".dropdown-selected").children[1].textContent === "Select a Category") {
+        displayError("Cannot Create Product", "Please select a Category");
+        return;
+    }
 
     if (document.querySelectorAll(".toggle-checkbox")[0].checked) {
         price = 0;

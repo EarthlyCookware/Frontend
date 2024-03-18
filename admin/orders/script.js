@@ -1,10 +1,19 @@
-let orderNumber = 0;
+let orderNumber;
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function createOrder(id, args){
+function reorganizeDates(obj) {
+    return Object.entries(obj)
+        .sort((a, b) => new Date(a[1]) - new Date(b[1]))
+        .reduce((acc, [key, value]) => {
+            acc[key] = value;
+            return acc;
+        }, {});
+}
+
+async function createOrder(id, args){
     orderNumber++;
     const newDiv = document.createElement("div");
     newDiv.classList.add("orders-table-row");
@@ -34,6 +43,8 @@ function createOrder(id, args){
     const orderStatus = document.createElement("span");
 
     orderStatus.classList.add("order-status");
+
+    args.checkpoints = reorganizeDates(args.checkpoints)
 
     if(Object.keys(args.checkpoints)[Object.keys(args.checkpoints).length - 1] === "received"){
         orderStatus.classList.add("received");
@@ -107,10 +118,12 @@ function createOrder(id, args){
     });*/
 
     const contextMenuElements = [
-        ["update", "Update Status"],
-        ["edit", "Edit Order"],
-        ["message", "Message Customer"],
-        ["note", "Add Note"],
+        ["shipping", "Mark Shipping"],
+        ["delivery", "Mark Out For Delivery"],
+        //["edit", "Edit Order"],
+        //["message", "Message Customer"],
+        ["check", "Mark as Received"],
+        ["refund", "Refund Order"],
         ["delete", "Cancel Order"],
     ];
 
@@ -123,6 +136,107 @@ function createOrder(id, args){
         contextMenuImg.src = `../icons/${element[0]}.png`;
         contextMenuP.innerHTML = element[1];
 
+        if(element[0] === "shipping"){
+            contextMenuElement.addEventListener("click", async function(e){
+                e.preventDefault();
+
+                if(orderStatus.classList.contains("refunded")) return;
+                if(orderStatus.classList.contains("cancelled")) return;
+
+                await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/shipOrder/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS, PATCH',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    },
+                    mode: 'cors'
+                });
+
+                await initialize();
+            })
+        } else if(element[0] === "delivery"){
+            contextMenuElement.addEventListener("click", async function(e){
+                e.preventDefault();
+
+                if(orderStatus.classList.contains("refunded")) return;
+                if(orderStatus.classList.contains("cancelled")) return;
+
+                await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/deliverOrder/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS, PATCH',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    },
+                    mode: 'cors'
+                });
+
+                await initialize();
+            })
+        } else if(element[0] === "check"){
+            contextMenuElement.addEventListener("click", async function(e){
+                e.preventDefault();
+
+                if(orderStatus.classList.contains("refunded")) return;
+                if(orderStatus.classList.contains("cancelled")) return;
+
+                await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/receiveOrder/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS, PATCH',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    },
+                    mode: 'cors'
+                });
+
+                await initialize();
+            })
+        } else if(element[0] === "refund"){
+            contextMenuElement.addEventListener("click", async function(e){
+                e.preventDefault();
+
+                if(orderStatus.classList.contains("refunded")) return;
+                if(orderStatus.classList.contains("cancelled")) return;
+
+                await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/refundOrder/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS, PATCH',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    },
+                    mode: 'cors'
+                });
+
+                await initialize();
+            })
+        } else if(element[0] === "delete"){
+            contextMenuElement.addEventListener("click", async function(e){
+                e.preventDefault();
+
+                if(orderStatus.classList.contains("cancelled")) return;
+
+                await fetch(`https://us-central1-ancientearth-cookware.cloudfunctions.net/app/cancelOrder/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS, PATCH',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    },
+                    mode: 'cors'
+                });
+
+                await initialize();
+            })
+        }
+
         contextMenuElement.append(contextMenuImg, contextMenuP);
         orderContextMenu.appendChild(contextMenuElement);
     });
@@ -134,6 +248,8 @@ function createOrder(id, args){
 }
 
 async function initialize(){
+    orderNumber = 0;
+
     document.querySelectorAll('#orders-table > *').forEach(element => {
         if(element.id !== 'orders-table-legend') {
             element.remove();
@@ -156,7 +272,7 @@ async function initialize(){
 
     for(let i = 0; i < Object.values(context).length; i++){
         try{
-            createOrder(Object.keys(context)[i], Object.values(context)[i]);
+            await createOrder(Object.keys(context)[i], Object.values(context)[i]);
         } catch (e) {
             console.error(e);
         }
